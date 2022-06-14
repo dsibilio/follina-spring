@@ -50,8 +50,8 @@ public class WordDocController {
         Path zipTemplate = classpathResourceToPath(FOLLINA_TEMPLATE);
         Path finalZip = Files.copy(zipTemplate, tmpDir, StandardCopyOption.REPLACE_EXISTING);
 
-        String target = StringUtils.hasText(cmd) ? DYNAMIC_ADDRESS_TEMPLATE.formatted(address, cmd)
-                : ADDRESS_TEMPLATE.formatted(address);
+        String target = StringUtils.hasText(cmd) ? String.format(DYNAMIC_ADDRESS_TEMPLATE, address, cmd)
+                : String.format(ADDRESS_TEMPLATE, address);
         updateDocRels(target, finalZip);
 
         response.setHeader("Content-Disposition", "attachment; filename=\"follina.doc\"");
@@ -69,7 +69,7 @@ public class WordDocController {
         URI uri = URI.create("jar:" + finalZip.toUri());
         try (FileSystem zipFs = FileSystems.newFileSystem(uri, env)) {
             Path docRels = zipFs.getPath(DOC_RELS_LOCATION);
-            String finalDocRels = new String(Files.readAllBytes(docRels)).formatted(target);
+            String finalDocRels = String.format(new String(Files.readAllBytes(docRels)), target);
             Files.write(docRels, finalDocRels.getBytes());
         }
     }
